@@ -204,6 +204,16 @@ separately.
   exactly the three intended generated-workflow changes. This is public
   design-partner validation, not adoption or endorsement.
 
+## External Positioning Review
+
+- [awesome-ai-security-tools #52](https://github.com/scadastrangelove/awesome-ai-security-tools/pull/52)
+  merged this project into its 1k+ Star Watchlist. The maintainer then narrowed
+  the entry on `main`: this is a broader, self-declared agent-readiness gate,
+  not a security scanner or enforcement control; the project is new, adoption
+  is minimal, and its only listed consumer is author-operated. This is
+  Watchlist inclusion and external positioning review, not adoption,
+  certification, or endorsement.
+
 After publishing on GitHub, check repository stars:
 
 ```bash

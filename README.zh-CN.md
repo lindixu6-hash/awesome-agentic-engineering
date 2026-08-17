@@ -194,6 +194,14 @@ Action 会输出 `score`、`rating`、`badge`、`passed`、`blocker-count`、
   源码复现工作流均通过，并准确检测到 3 个预期的生成工作流变化。这是公开
   设计伙伴验证，不代表采用或背书。
 
+## 外部定位评审
+
+- [awesome-ai-security-tools #52](https://github.com/scadastrangelove/awesome-ai-security-tools/pull/52)
+  已将本项目合并至其 1k+ Star Watchlist（观察名单）。维护者随后在主分支
+  收紧描述：本项目是更广义的、自声明的 Agent 生产就绪门禁，不是安全扫描器
+  或强制控制；项目仍很新、采用很少，唯一列出的使用方也由作者本人维护。
+  这是观察名单收录与外部定位评审，不代表采用、认证或背书。
+
 发布到 GitHub 后，可以这样检查 star：
 
 ```bash
