@@ -281,7 +281,7 @@ test("producer attests one bundle before calling immutable verifier", () => {
   assert.match(workflow, /needs: produce/);
   assert.match(
     workflow,
-    /verify-eval-evidence\.yml@8d4b435f66f58a570b65dd8b4952bf7e1e2dd62f/
+    /verify-eval-evidence\.yml@250bebc26eaaa3b027058ee3d68c3e1776aec668/
   );
   assert.doesNotMatch(workflow, /uses: [^\n]+@v\d/);
 });
