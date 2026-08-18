@@ -242,6 +242,13 @@ test("reusable verifier pins code, actions, identity, and negative checks", () =
   assert.match(workflow, /--deny-self-hosted-runners/);
   assert.match(workflow, /Tampered bundle unexpectedly verified/);
   assert.match(workflow, /Wrong source digest unexpectedly verified/);
+  assert.match(workflow, /Wrong workflow identity unexpectedly verified/);
+  assert.match(workflow, /Older valid attestation unexpectedly replayed/);
+  assert.match(workflow, /gh release download v0\.14\.0/);
+  assert.match(
+    workflow,
+    /81671c0e9589e65413e13b7ca7a19d3453166ae783cb5ae3feb4b46565256521/
+  );
   assert.match(workflow, /eval-evidence-provenance\.js/);
   assert.doesNotMatch(workflow, /uses: [^\n]+@v\d/);
 });
@@ -259,6 +266,14 @@ test("producer attests one bundle before calling immutable verifier", () => {
   );
   assert.match(workflow, /--sort=name/);
   assert.match(workflow, /openai-agents-evidence\.tar\.gz/);
+  assert.match(
+    workflow,
+    /evals\/prompt-injection\/tool-permissions\.json/
+  );
+  assert.match(
+    workflow,
+    /evals\/prompt-injection\/approval-policy\.json/
+  );
   assert.match(
     workflow,
     /actions\/attest@1e69f48acb82d1966a394da916b4c1698aa569d6/

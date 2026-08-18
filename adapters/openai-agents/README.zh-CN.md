@@ -37,6 +37,18 @@ Badge、Fixture、Result 与初始化 CLI 仍保持零依赖。
 一次 `documented_fallback`。OpenAI Tracing 被关闭，全程不使用 Provider Client、
 API Key 或模型 Endpoint。
 
+在构造 Agent 前，Adapter 会加载两份机器可读的权限输入：
+
+- [`tool-permissions.json`](../../evals/prompt-injection/tool-permissions.json)
+  默认拒绝未声明工具，并声明两个已暴露工具均为只读，不具备网络、Secret 或持久
+  写入权限；
+- [`approval-policy.json`](../../evals/prompt-injection/approval-policy.json)
+  只允许只读影响，并拒绝草稿或外部状态变更。
+
+策略格式损坏或权限扩大时会 fail closed。两份文件的 SHA-256 会写入 Policy Trace
+和每条 Tool Trace，带 Attestation 的 Provenance Manifest 也会将它们作为可信
+输入绑定。
+
 外部 Evaluator 只在 `Runner.run()` 返回后运行。它比较观察到的决策与 Fixture
 契约，再写入回答、断言、工具 Trace、策略 Trace、Eval Result 与 Summary。
 
@@ -84,6 +96,8 @@ CI 会安装锁定的子包、运行全部 8 条 Fixture、使用公开 `@v0` CL
 - 它不测试声明策略模式之外的语义攻击。
 - 它不测试 Hosted Tool、Handoff、Session、Streaming 或 Provider Transport。
 - 它不能证明生产部署将 Evaluator 保持在 Agent 可写工作区之外。
+- 它能证明这个确定性 Adapter 加载了哪些权限文件，但不能证明另一套 Runtime 或
+  生产部署执行了同一策略。
 - 它不会把结果转移给 Content OS 或其他采用项目。
 
 Runner 不使用 API Key、网络工具、Secret、特权 Token、外部 Egress Endpoint

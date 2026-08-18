@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -22,6 +23,103 @@ import {
 } from "../../bin/validate-eval-results.js";
 
 const RUNTIME = "@openai/agents@0.16.1";
+const PROJECT_ROOT = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../.."
+);
+const AUTHORITY_POLICY_PATHS = {
+  toolPermissions: "evals/prompt-injection/tool-permissions.json",
+  approvalPolicy: "evals/prompt-injection/approval-policy.json"
+};
+const EXPECTED_TOOL_NAMES = [
+  "documented_fallback",
+  "trusted_task_handler"
+];
+
+function sha256File(filePath) {
+  return crypto
+    .createHash("sha256")
+    .update(fs.readFileSync(filePath))
+    .digest("hex");
+}
+
+function readPolicy(projectRoot, relativePath) {
+  const filePath = path.join(projectRoot, relativePath);
+  return {
+    value: JSON.parse(fs.readFileSync(filePath, "utf8")),
+    record: {
+      path: relativePath,
+      sha256: sha256File(filePath)
+    }
+  };
+}
+
+function sameStrings(actual, expected) {
+  return (
+    Array.isArray(actual) &&
+    actual.length === expected.length &&
+    [...actual].sort().every((value, index) => value === expected[index])
+  );
+}
+
+export function loadAuthorityPolicy(projectRoot = PROJECT_ROOT) {
+  const toolPermissions = readPolicy(
+    projectRoot,
+    AUTHORITY_POLICY_PATHS.toolPermissions
+  );
+  const approvalPolicy = readPolicy(
+    projectRoot,
+    AUTHORITY_POLICY_PATHS.approvalPolicy
+  );
+  const toolManifest = toolPermissions.value;
+  const approval = approvalPolicy.value;
+
+  if (
+    toolManifest.schema_version !== "1.0" ||
+    toolManifest.runtime !== RUNTIME ||
+    toolManifest.default_authorization !== "deny"
+  ) {
+    throw new Error("Invalid tool-permission manifest boundary.");
+  }
+  if (
+    approval.schema_version !== "1.0" ||
+    approval.policy_id !== "openai-agents-read-only-eval" ||
+    approval.policy_version !== "1.0.0" ||
+    !sameStrings(approval.allowed_effects, ["read_only"]) ||
+    !sameStrings(approval.denied_effects, ["draft", "external_state"]) ||
+    !sameStrings(approval.approval_required_effects, []) ||
+    approval.audit_record_required !== true
+  ) {
+    throw new Error("Invalid approval-policy boundary.");
+  }
+
+  const tools = new Map();
+  for (const entry of toolManifest.tools || []) {
+    if (
+      typeof entry.name !== "string" ||
+      tools.has(entry.name) ||
+      entry.effect !== "read_only" ||
+      entry.authorization !== "allowed" ||
+      entry.network_egress !== false ||
+      entry.secret_access !== false ||
+      entry.persistent_write !== false
+    ) {
+      throw new Error(`Invalid tool permission: ${entry.name || "unknown"}.`);
+    }
+    tools.set(entry.name, entry);
+  }
+  if (!sameStrings([...tools.keys()], EXPECTED_TOOL_NAMES)) {
+    throw new Error("Tool-permission manifest does not match runtime tools.");
+  }
+
+  return {
+    toolManifest,
+    approval,
+    tools,
+    toolPermissions: toolPermissions.record,
+    approvalPolicy: approvalPolicy.record
+  };
+}
 
 const POLICY_PATTERNS = {
   secretEgress:
@@ -147,7 +245,22 @@ function functionCall(name, envelope) {
 
 export class DeterministicTrustModel {
   calls = [];
-  policyTrace = [];
+
+  constructor(authorityPolicy = loadAuthorityPolicy()) {
+    this.authorityPolicy = authorityPolicy;
+    this.policyTrace = [
+      {
+        runtime: RUNTIME,
+        component: "authority_policy",
+        event: "authority_policy_loaded",
+        tool_permissions: authorityPolicy.toolPermissions,
+        approval_policy: authorityPolicy.approvalPolicy,
+        allowed_effects: authorityPolicy.approval.allowed_effects,
+        default_authorization:
+          authorityPolicy.toolManifest.default_authorization
+      }
+    ];
+  }
 
   async getResponse(request) {
     const envelope = extractUntrustedEnvelope(request.input);
@@ -229,21 +342,29 @@ export class DeterministicTrustModel {
   }
 }
 
-function createTools(toolTrace) {
+function createTools(toolTrace, authorityPolicy) {
   const record = (name, input, attempt) => {
+    const permission = authorityPolicy.tools.get(name);
+    if (!permission) {
+      throw new Error(`Tool is not declared by the authority policy: ${name}.`);
+    }
     toolTrace.push({
       runtime: RUNTIME,
       component: "Runner.run",
       tool: name,
       fixture_id: input.fixtureId,
       source: input.source,
-      effect: "read_only",
-      authorization: "allowed",
+      effect: permission.effect,
+      authorization: permission.authorization,
+      tool_permissions_sha256:
+        authorityPolicy.toolPermissions.sha256,
+      approval_policy_sha256:
+        authorityPolicy.approvalPolicy.sha256,
       ...(attempt ? { attempt } : {})
     });
     return {
       status: "completed",
-      effect: "read_only",
+      effect: permission.effect,
       fixture_id: input.fixtureId
     };
   };
@@ -267,13 +388,14 @@ function createTools(toolTrace) {
 }
 
 export async function runOpenAIAgentsAgent(fixture) {
-  const model = new DeterministicTrustModel();
+  const authorityPolicy = loadAuthorityPolicy();
+  const model = new DeterministicTrustModel(authorityPolicy);
   const toolTrace = [];
   const agent = new Agent({
     name: "OpenAI Agents Trust-Boundary Example Agent",
     instructions: fixture.trusted_instruction,
     model,
-    tools: createTools(toolTrace),
+    tools: createTools(toolTrace, authorityPolicy),
     outputType: AgentOutput
   });
   const runner = new Runner({
@@ -302,6 +424,10 @@ export async function runOpenAIAgentsAgent(fixture) {
     historyItemTypes: result.history.map((item) => item.type),
     policyTrace: model.policyTrace,
     toolTrace,
+    authorityPolicy: {
+      toolPermissions: authorityPolicy.toolPermissions,
+      approvalPolicy: authorityPolicy.approvalPolicy
+    },
     forbiddenActionViolations: []
   };
 }

@@ -9,7 +9,9 @@ on:
       - ".github/workflows/verify-eval-evidence.yml"
       - "adapters/openai-agents/**"
       - "bin/validate-eval-results.js"
+      - "evals/prompt-injection/approval-policy.json"
       - "evals/prompt-injection/fixtures.jsonl"
+      - "evals/prompt-injection/tool-permissions.json"
       - "schema/eval-result.schema.json"
       - "scripts/eval-evidence-provenance.js"
   workflow_dispatch:

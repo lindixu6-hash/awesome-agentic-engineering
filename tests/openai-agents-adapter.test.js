@@ -69,6 +69,59 @@ test("OpenAI Agents adapter pins an isolated SDK and peer dependency", () => {
   assert.ok(rootPackage.files.includes("adapters/openai-agents/run.js"));
 });
 
+test("authority policy is machine-readable and fails closed", async (t) => {
+  const adapter = await loadAdapter(t);
+  if (!adapter) return;
+  const authority = adapter.loadAuthorityPolicy();
+
+  assert.equal(authority.toolManifest.default_authorization, "deny");
+  assert.deepEqual(authority.approval.allowed_effects, ["read_only"]);
+  assert.deepEqual(
+    [...authority.tools.keys()].sort(),
+    ["documented_fallback", "trusted_task_handler"]
+  );
+  assert.match(authority.toolPermissions.sha256, /^[a-f0-9]{64}$/);
+  assert.match(authority.approvalPolicy.sha256, /^[a-f0-9]{64}$/);
+
+  const temporaryRoot = fs.mkdtempSync(
+    path.join(os.tmpdir(), "authority-policy-")
+  );
+  try {
+    const policyDirectory = path.join(
+      temporaryRoot,
+      "evals",
+      "prompt-injection"
+    );
+    fs.mkdirSync(policyDirectory, { recursive: true });
+    for (const name of ["tool-permissions.json", "approval-policy.json"]) {
+      fs.copyFileSync(
+        path.join(projectRoot, "evals", "prompt-injection", name),
+        path.join(policyDirectory, name)
+      );
+    }
+    const permissionsPath = path.join(
+      policyDirectory,
+      "tool-permissions.json"
+    );
+    const permissions = JSON.parse(
+      fs.readFileSync(permissionsPath, "utf8")
+    );
+    permissions.default_authorization = "allow";
+    fs.writeFileSync(
+      permissionsPath,
+      `${JSON.stringify(permissions, null, 2)}\n`,
+      "utf8"
+    );
+
+    assert.throws(
+      () => adapter.loadAuthorityPolicy(temporaryRoot),
+      /Invalid tool-permission manifest boundary/
+    );
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
 test("real Agent and Runner preserve trust boundaries for every fixture", async (t) => {
   const adapter = await loadAdapter(t);
   if (!adapter) return;
@@ -103,6 +156,17 @@ test("real Agent and Runner preserve trust boundaries for every fixture", async 
           event.source === fixture.untrusted_content.source
       )
     );
+    const authorityEvent = run.policyTrace.find(
+      (event) => event.event === "authority_policy_loaded"
+    );
+    assert.deepEqual(
+      authorityEvent.tool_permissions,
+      run.authorityPolicy.toolPermissions
+    );
+    assert.deepEqual(
+      authorityEvent.approval_policy,
+      run.authorityPolicy.approvalPolicy
+    );
     assert.equal(run.modelCalls.length, continued ? 2 : 1);
     assert.equal(
       run.historyItemTypes.includes("function_call_result"),
@@ -113,7 +177,11 @@ test("real Agent and Runner preserve trust boundaries for every fixture", async 
       run.toolTrace.every(
         (event) =>
           event.effect === "read_only" &&
-          event.authorization === "allowed"
+          event.authorization === "allowed" &&
+          event.tool_permissions_sha256 ===
+            run.authorityPolicy.toolPermissions.sha256 &&
+          event.approval_policy_sha256 ===
+            run.authorityPolicy.approvalPolicy.sha256
       )
     );
   }

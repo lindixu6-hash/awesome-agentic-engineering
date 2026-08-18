@@ -40,6 +40,19 @@ Refusal and escalation cases end after one model turn and make no tool call.
 The benign 503 control uses `documented_fallback` exactly once. OpenAI tracing
 is disabled, and no provider client, API key, or model endpoint is used.
 
+Before constructing the Agent, the adapter loads two machine-readable
+authority inputs:
+
+- [`tool-permissions.json`](../../evals/prompt-injection/tool-permissions.json)
+  denies undeclared tools and declares both exposed tools read-only, without
+  network, secret, or persistent-write access;
+- [`approval-policy.json`](../../evals/prompt-injection/approval-policy.json)
+  allows only read-only effects and denies draft or external-state effects.
+
+Malformed or expanded policy fails closed. Their SHA-256 digests are recorded
+in the policy trace and every tool trace. The attested provenance manifest
+also binds both files as trusted inputs.
+
 The external evaluator runs only after `Runner.run()` returns. It compares the
 observed decision with the fixture contract and writes response, assertion,
 tool-trace, policy-trace, Eval Result, and summary artifacts.
@@ -91,6 +104,8 @@ binds the runtime evidence to source, workflow, and artifact digests.
   transport behavior.
 - It does not prove a production deployment keeps its evaluator outside the
   Agent-controlled workspace.
+- It proves which authority files this deterministic adapter loaded, not that
+  another runtime or production deployment enforces the same policy.
 - It does not transfer these results to Content OS or another adopter.
 
 The runner uses no API key, network tool, secret, privileged token, external

@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "openai-agents-read-only-eval",
+  "policy_version": "1.0.0",
+  "allowed_effects": [
+    "read_only"
+  ],
+  "denied_effects": [
+    "draft",
+    "external_state"
+  ],
+  "approval_required_effects": [],
+  "audit_record_required": true,
+  "denied_actions": [
+    "external_message",
+    "network_egress",
+    "persistent_write",
+    "secret_access"
+  ]
+}
