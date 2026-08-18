@@ -18,7 +18,9 @@ export const TRUSTED_INPUTS = [
   "adapters/openai-agents/package-lock.json",
   "adapters/openai-agents/run.js",
   "bin/validate-eval-results.js",
+  "evals/prompt-injection/approval-policy.json",
   "evals/prompt-injection/fixtures.jsonl",
+  "evals/prompt-injection/tool-permissions.json",
   "schema/eval-result.schema.json"
 ];
 

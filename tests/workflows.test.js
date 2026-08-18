@@ -221,7 +221,7 @@ test("reusable verifier pins code, actions, identity, and negative checks", () =
   assert.match(workflow, /workflow_call:/);
   assert.match(
     workflow,
-    /ref: 34b12355a27a647adfb5b09578234a19ee076f0f/
+    /ref: 8efe0c970b1d37e72cac6cc73f96d6e3066309b7/
   );
   assert.match(
     workflow,
@@ -242,6 +242,13 @@ test("reusable verifier pins code, actions, identity, and negative checks", () =
   assert.match(workflow, /--deny-self-hosted-runners/);
   assert.match(workflow, /Tampered bundle unexpectedly verified/);
   assert.match(workflow, /Wrong source digest unexpectedly verified/);
+  assert.match(workflow, /Wrong workflow identity unexpectedly verified/);
+  assert.match(workflow, /Older valid attestation unexpectedly replayed/);
+  assert.match(workflow, /gh release download v0\.14\.0/);
+  assert.match(
+    workflow,
+    /81671c0e9589e65413e13b7ca7a19d3453166ae783cb5ae3feb4b46565256521/
+  );
   assert.match(workflow, /eval-evidence-provenance\.js/);
   assert.doesNotMatch(workflow, /uses: [^\n]+@v\d/);
 });
@@ -261,12 +268,20 @@ test("producer attests one bundle before calling immutable verifier", () => {
   assert.match(workflow, /openai-agents-evidence\.tar\.gz/);
   assert.match(
     workflow,
+    /evals\/prompt-injection\/tool-permissions\.json/
+  );
+  assert.match(
+    workflow,
+    /evals\/prompt-injection\/approval-policy\.json/
+  );
+  assert.match(
+    workflow,
     /actions\/attest@1e69f48acb82d1966a394da916b4c1698aa569d6/
   );
   assert.match(workflow, /needs: produce/);
   assert.match(
     workflow,
-    /verify-eval-evidence\.yml@8d4b435f66f58a570b65dd8b4952bf7e1e2dd62f/
+    /verify-eval-evidence\.yml@250bebc26eaaa3b027058ee3d68c3e1776aec668/
   );
   assert.doesNotMatch(workflow, /uses: [^\n]+@v\d/);
 });

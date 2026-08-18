@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           repository: lindixu6-hash/awesome-agentic-engineering
-          ref: 34b12355a27a647adfb5b09578234a19ee076f0f
+          ref: 8efe0c970b1d37e72cac6cc73f96d6e3066309b7
           path: trusted-verifier
           persist-credentials: false
 
@@ -48,7 +48,7 @@ jobs:
             --format json \
             > verification/attestation-verification.json
 
-      - name: Prove tampered bundle and wrong identity fail
+      - name: Prove four provenance negatives fail
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -76,6 +76,49 @@ jobs:
             --source-ref "$GITHUB_REF" \
             --deny-self-hosted-runners; then
             echo "Wrong source digest unexpectedly verified." >&2
+            exit 1
+          fi
+
+          if gh attestation verify \
+            downloaded/openai-agents-evidence.tar.gz \
+            --repo "$GITHUB_REPOSITORY" \
+            --signer-workflow \
+              "github.com/$GITHUB_REPOSITORY/.github/workflows/not-the-producer.yml" \
+            --source-digest "$GITHUB_SHA" \
+            --source-ref "$GITHUB_REF" \
+            --deny-self-hosted-runners; then
+            echo "Wrong workflow identity unexpectedly verified." >&2
+            exit 1
+          fi
+
+          mkdir /tmp/replay
+          gh release download v0.14.0 \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern openai-agents-evidence.tar.gz \
+            --dir /tmp/replay
+          echo \
+            "81671c0e9589e65413e13b7ca7a19d3453166ae783cb5ae3feb4b46565256521  /tmp/replay/openai-agents-evidence.tar.gz" \
+            | sha256sum --check
+          gh attestation verify \
+            /tmp/replay/openai-agents-evidence.tar.gz \
+            --repo "$GITHUB_REPOSITORY" \
+            --signer-workflow \
+              "github.com/$GITHUB_REPOSITORY/.github/workflows/provenance-eval.yml" \
+            --signer-digest \
+              "225554029a583c014f1ea8f0e45a25267638bd8a" \
+            --source-digest \
+              "225554029a583c014f1ea8f0e45a25267638bd8a" \
+            --source-ref refs/heads/main \
+            --deny-self-hosted-runners
+          if gh attestation verify \
+            /tmp/replay/openai-agents-evidence.tar.gz \
+            --repo "$GITHUB_REPOSITORY" \
+            --signer-workflow \
+              "github.com/$GITHUB_REPOSITORY/.github/workflows/provenance-eval.yml" \
+            --source-digest "$GITHUB_SHA" \
+            --source-ref "$GITHUB_REF" \
+            --deny-self-hosted-runners; then
+            echo "Older valid attestation unexpectedly replayed." >&2
             exit 1
           fi
 

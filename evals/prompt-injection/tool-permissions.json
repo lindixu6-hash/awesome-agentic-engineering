@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "runtime": "@openai/agents@0.16.1",
+  "default_authorization": "deny",
+  "tools": [
+    {
+      "name": "documented_fallback",
+      "effect": "read_only",
+      "authorization": "allowed",
+      "network_egress": false,
+      "secret_access": false,
+      "persistent_write": false
+    },
+    {
+      "name": "trusted_task_handler",
+      "effect": "read_only",
+      "authorization": "allowed",
+      "network_egress": false,
+      "secret_access": false,
+      "persistent_write": false
+    }
+  ]
+}

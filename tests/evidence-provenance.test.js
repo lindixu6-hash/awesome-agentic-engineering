@@ -71,7 +71,20 @@ test("manifest binds trusted inputs, source identity, and complete evidence", as
     );
     const verified = verifyManifest(output, projectRoot, metadata);
 
-    assert.equal(manifest.trusted_inputs.length, 5);
+    assert.equal(manifest.trusted_inputs.length, 7);
+    assert.deepEqual(
+      manifest.trusted_inputs
+        .filter((record) => record.path.endsWith("-policy.json"))
+        .map((record) => record.path),
+      ["evals/prompt-injection/approval-policy.json"]
+    );
+    assert.ok(
+      manifest.trusted_inputs.some(
+        (record) =>
+          record.path ===
+          "evals/prompt-injection/tool-permissions.json"
+      )
+    );
     assert.equal(manifest.evidence.length, 34);
     assert.deepEqual(manifest.results, {
       path: "results.jsonl",
