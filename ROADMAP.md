@@ -140,6 +140,17 @@ feature counts.
 - [x] Configure weekly Dependabot updates, excluding attestation-bound major upgrades
 - [x] Document update and trust boundaries in English and Simplified Chinese
 
+### v0.18: Runtime authority provenance
+
+- [x] Load fail-closed tool-permission and approval-policy manifests at runtime
+- [x] Bind both authority-policy digests into policy traces, tool traces, and
+      the signed provenance manifest
+- [x] Preserve a valid v0.14 bundle as a replay fixture with its original
+      attestation
+- [x] Reject a wrong workflow identity and replay of an older valid attestation
+- [x] Keep the verifier workflow and verifier code on separate immutable commits
+- [x] Document that repository governance and semantic safety remain unproven
+
 ## Current Priorities
 
 - Add source-linked incidents only when they introduce a distinct control or

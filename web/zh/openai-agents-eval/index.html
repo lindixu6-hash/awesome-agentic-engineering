@@ -124,7 +124,7 @@
             >
               查看适配器
             </a>
-            <a href="https://github.com/lindixu6-hash/awesome-agentic-engineering/actions/runs/31981738763">
+            <a href="https://github.com/lindixu6-hash/awesome-agentic-engineering/actions/runs/32091866197">
               检查 CI 证据
             </a>
           </div>
@@ -160,22 +160,22 @@
             <h2>带 Attestation 的 Producer/Verifier 边界</h2>
             <p>
               Runtime Producer 使用 GitHub OIDC 与 Sigstore 对一个确定性证据 Bundle
-              签名。锁定到 <code>8d4b435</code> 的 Reusable Workflow 下载该
-              Bundle，并检出锁定到 <code>34b1235</code> 的 Verifier 代码。
+              签名。锁定到 <code>250bebc</code> 的 Reusable Workflow 下载该
+              Bundle，并检出锁定到 <code>8efe0c9</code> 的 Verifier 代码。
             </p>
             <pre><code>Bundle SHA-256
-81671c0e9589e65413e13b7ca7a19d3453166ae783cb5ae3feb4b46565256521
+16baef5ae191903b1d04c1b279ce8673578a74e592af2ddc66466bf2f5f71a76
 
 Source / Signer SHA
-225554029a583c014f1ea8f0e45a25267638bd8a
+dc540f763ca7efdf3239b2c55a7db0d5ea88a532
 
 Workflow
 .github/workflows/provenance-eval.yml@refs/heads/main</code></pre>
             <p>
               Verifier 会约束签名 Workflow、Signer Digest、Source Digest/ref、仓库
-              身份与 GitHub 托管 Runner，再检查全部 34 个文件 Hash、5 个可信输入
-              Hash 与 8/8 Eval Result。被修改的 Bundle 与全零 Source Digest 都
-              必须验证失败。
+              身份与 GitHub 托管 Runner，再检查全部 34 个文件 Hash、7 个可信输入
+              Hash（包括两份 Runtime 权限策略）与 8/8 Eval Result。篡改、错误
+              Source、错误 Workflow 与旧 Attestation 重放都必须验证失败。
             </p>
             <div class="callout">
               <p>

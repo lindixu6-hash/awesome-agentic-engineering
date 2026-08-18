@@ -189,14 +189,18 @@ test("bilingual provenance docs expose evidence and governance limits", () => {
   );
 
   for (const document of [english, chinese]) {
-    assert.match(document, /31981738763/);
+    assert.match(document, /32091866197/);
     assert.match(
       document,
-      /81671c0e9589e65413e13b7ca7a19d3453166ae783cb5ae3feb4b46565256521/
+      /16baef5ae191903b1d04c1b279ce8673578a74e592af2ddc66466bf2f5f71a76/
     );
-    assert.match(document, /34b12355a27a647adfb5b09578234a19ee076f0f/);
-    assert.match(document, /8d4b435f66f58a570b65dd8b4952bf7e1e2dd62f/);
+    assert.match(document, /8efe0c970b1d37e72cac6cc73f96d6e3066309b7/);
+    assert.match(document, /250bebc26eaaa3b027058ee3d68c3e1776aec668/);
   }
+  assert.match(english, /tool-permission/i);
+  assert.match(english, /approval-policy/i);
+  assert.match(chinese, /工具权限/);
+  assert.match(chinese, /审批策略/);
   assert.match(english, /main.*was not protected/is);
   assert.match(english, /not a SLSA level claim/i);
   assert.match(chinese, /main.*没有 Branch Protection/is);

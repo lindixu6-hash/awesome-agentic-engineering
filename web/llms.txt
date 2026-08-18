@@ -58,8 +58,8 @@ strict blocker failure. CI checks byte equality with agentic-init output.
 - Main CI: https://github.com/lindixu6-hash/awesome-agentic-engineering/actions/workflows/ci.yml
 - Public LangGraph evidence run: https://github.com/lindixu6-hash/awesome-agentic-engineering/actions/runs/31975175069
 - Public OpenAI Agents SDK evidence run: https://github.com/lindixu6-hash/awesome-agentic-engineering/actions/runs/31980983499
-- Attested producer/verifier run: https://github.com/lindixu6-hash/awesome-agentic-engineering/actions/runs/31981738763
-- Attested bundle SHA-256: 81671c0e9589e65413e13b7ca7a19d3453166ae783cb5ae3feb4b46565256521
+- Attested producer/verifier run: https://github.com/lindixu6-hash/awesome-agentic-engineering/actions/runs/32091866197
+- Attested bundle SHA-256: 16baef5ae191903b1d04c1b279ce8673578a74e592af2ddc66466bf2f5f71a76
 - Real consumer audit (Content OS): https://github.com/lindixu6-hash/ai-content-workflow-skills/actions/runs/31974318431
 - Source-linked production incidents (English): https://github.com/lindixu6-hash/awesome-agentic-engineering/blob/main/docs/production-incidents.md
 - 带来源的生产事故（简体中文）: https://github.com/lindixu6-hash/awesome-agentic-engineering/blob/main/docs/production-incidents.zh-CN.md
