@@ -221,7 +221,7 @@ test("reusable verifier pins code, actions, identity, and negative checks", () =
   assert.match(workflow, /workflow_call:/);
   assert.match(
     workflow,
-    /ref: 34b12355a27a647adfb5b09578234a19ee076f0f/
+    /ref: 8efe0c970b1d37e72cac6cc73f96d6e3066309b7/
   );
   assert.match(
     workflow,
