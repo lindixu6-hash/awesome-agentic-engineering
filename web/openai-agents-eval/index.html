@@ -125,7 +125,7 @@
             >
               Open the adapter
             </a>
-            <a href="https://github.com/lindixu6-hash/awesome-agentic-engineering/actions/runs/31981738763">
+            <a href="https://github.com/lindixu6-hash/awesome-agentic-engineering/actions/runs/32091866197">
               Inspect CI evidence
             </a>
           </div>
@@ -163,23 +163,24 @@
             <p>
               The runtime producer signs one deterministic evidence bundle with
               GitHub OIDC and Sigstore. A reusable workflow pinned to
-              <code>8d4b435</code> downloads that bundle and checks out
-              verifier code pinned to <code>34b1235</code>.
+              <code>250bebc</code> downloads that bundle and checks out
+              verifier code pinned to <code>8efe0c9</code>.
             </p>
             <pre><code>bundle sha256
-81671c0e9589e65413e13b7ca7a19d3453166ae783cb5ae3feb4b46565256521
+16baef5ae191903b1d04c1b279ce8673578a74e592af2ddc66466bf2f5f71a76
 
 source / signer sha
-225554029a583c014f1ea8f0e45a25267638bd8a
+dc540f763ca7efdf3239b2c55a7db0d5ea88a532
 
 workflow
 .github/workflows/provenance-eval.yml@refs/heads/main</code></pre>
             <p>
               The verifier enforces signer workflow, signer digest, source
               digest/ref, repository identity, and a GitHub-hosted runner. It
-              then checks all 34 file hashes, five trusted-input hashes, and
-              8/8 Eval Results. A modified bundle and an all-zero source digest
-              must both fail.
+              then checks all 34 file hashes, seven trusted-input hashes,
+              including both runtime authority policies, and 8/8 Eval Results.
+              Tamper, wrong-source, wrong-workflow, and older-attestation
+              replay attempts must all fail.
             </p>
             <div class="callout">
               <p>

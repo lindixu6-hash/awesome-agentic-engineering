@@ -58,8 +58,9 @@ Use these first:
   tests. Read the
   [live OpenAI Agents SDK prompt-injection eval guide](https://lindixu6-hash.github.io/awesome-agentic-engineering/openai-agents-eval/).
 - [Attested Evidence Provenance](docs/evidence-provenance.md): separate
-  production and SHA-pinned verification jobs, bind source and evidence
-  digests, verify GitHub/Sigstore identity, and retain negative tamper checks.
+  production and SHA-pinned verification jobs, bind source, authority-policy,
+  and evidence digests, verify GitHub/Sigstore identity, and reject tamper,
+  wrong-workflow, and older-attestation replay attempts.
 - [Risk-Tiered Profiles](profiles/README.md): apply different total, per-area,
   tool-effect, approval, and blocker gates to read-only, draft-only, and
   state-changing Agents.

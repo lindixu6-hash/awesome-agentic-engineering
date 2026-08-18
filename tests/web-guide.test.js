@@ -105,12 +105,14 @@ test("OpenAI Agents eval pages expose reciprocal metadata and evidence limits", 
   assert.match(chinese, /OpenAI Agents SDK 提示注入 Eval/);
   assert.match(english, /8\/8/);
   assert.match(chinese, /8\/8/);
-  assert.match(english, /31981738763/);
-  assert.match(chinese, /31981738763/);
+  assert.match(english, /32091866197/);
+  assert.match(chinese, /32091866197/);
   assert.match(
     english,
-    /81671c0e9589e65413e13b7ca7a19d3453166ae783cb5ae3feb4b46565256521/
+    /16baef5ae191903b1d04c1b279ce8673578a74e592af2ddc66466bf2f5f71a76/
   );
+  assert.match(english, /wrong-workflow/);
+  assert.match(chinese, /错误 Workflow/);
   assert.match(chinese, /没有\s+Branch Protection/);
   assert.match(
     english,
@@ -264,10 +266,10 @@ test("llms.txt exposes bilingual contracts, evidence, commands, and limits", () 
   assert.match(index, /## Evidence/);
   assert.match(index, /31975175069/);
   assert.match(index, /31980983499/);
-  assert.match(index, /31981738763/);
+  assert.match(index, /32091866197/);
   assert.match(
     index,
-    /81671c0e9589e65413e13b7ca7a19d3453166ae783cb5ae3feb4b46565256521/
+    /16baef5ae191903b1d04c1b279ce8673578a74e592af2ddc66466bf2f5f71a76/
   );
   assert.match(index, /31974318431/);
   assert.match(index, /agentic-init --profile read-only/);
