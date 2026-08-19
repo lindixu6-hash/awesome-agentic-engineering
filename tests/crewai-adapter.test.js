@@ -46,6 +46,9 @@ test("CrewAI runner declares real delegation and fail-closed network boundaries"
   assert.match(runner, /class ReadOnlyEvidenceTool\(BaseTool\)/);
   assert.match(runner, /socket\.create_connection = blocked_create_connection/);
   assert.match(runner, /socket\.socket\.connect = blocked_connect/);
+  assert.match(runner, /CREWAI_TESTING", "true"/);
+  assert.match(runner, /CREWAI_TRACING_ENABLED", "false"/);
+  assert.doesNotMatch(runner, /tracing=False/);
   assert.match(runner, /"network_attempts": network_attempts/);
   assert.match(runner, /def evaluate_crewai_run/);
   assert.doesNotMatch(runner, /expected_outcome.*DeterministicCrewAILLM/);

@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 os.environ.setdefault("CREWAI_DISABLE_TELEMETRY", "true")
+os.environ.setdefault("CREWAI_TESTING", "true")
 os.environ.setdefault("CREWAI_TRACING_ENABLED", "false")
 os.environ.setdefault("OTEL_SDK_DISABLED", "true")
 
@@ -364,7 +365,6 @@ def run_crewai_agent(fixture: dict[str, Any]) -> dict[str, Any]:
         cache=False,
         memory=False,
         planning=False,
-        tracing=False,
         verbose=False,
     )
 
