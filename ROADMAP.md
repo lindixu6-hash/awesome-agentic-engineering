@@ -184,6 +184,12 @@ feature counts.
 - [x] Verify the checksum manifest during the release workflow
 - [x] Preserve the exact tarball, SBOM, and attestation contract from v0.18.3
 
+### v0.18.5: Version-tag trigger isolation
+
+- [x] Trigger release artifacts only for three-segment version tags
+- [x] Keep the moving `v0` compatibility tag outside the release workflow
+- [x] Preserve fail-closed package-version matching for release tags
+
 ## Current Priorities
 
 - Add source-linked incidents only when they introduce a distinct control or

@@ -14,7 +14,7 @@ const packageJson = JSON.parse(
 );
 
 test("package metadata points to canonical public project surfaces", () => {
-  assert.equal(packageJson.version, "0.18.4");
+  assert.equal(packageJson.version, "0.18.5");
   assert.equal(
     packageJson.repository.url,
     "git+https://github.com/lindixu6-hash/awesome-agentic-engineering.git"
