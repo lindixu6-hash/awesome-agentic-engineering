@@ -372,3 +372,16 @@ GitHub 仓库发布设置见 [PUBLICATION.md](PUBLICATION.md)。
 - [可执行 Runtime 适配器提案](https://github.com/lindixu6-hash/awesome-agentic-engineering/issues/new?template=runtime-adapter.yml)
 
 请先阅读[中文贡献指南](CONTRIBUTING.zh-CN.md)。
+
+## 治理与引用
+
+- [CODEOWNERS](.github/CODEOWNERS) 标明仓库评审责任人，但不能绕过 CI、
+  证据要求或独立评审。
+- [CITATION.cff](CITATION.cff) 为 **Repository-Owned Agent Readiness
+  Contract** 提供引用元数据。引用时应固定 Release 或 Commit，确保被评估
+  合约可复现。
+- [GitHub Sponsors](https://github.com/sponsors/lindixu6-hash) 是仓库声明的
+  唯一资助渠道。资助不会影响评分、证据、评审或收录决定。
+
+非目标：这些治理文件不代表 Agent 已通过生产安全认证，不会把自报证据变成
+独立验证，也不会将资助设为参与条件。

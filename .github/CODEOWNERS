@@ -1,0 +1,10 @@
+# Repository-wide review ownership. This identifies reviewers; it does not
+# bypass branch protection, CI, evidence requirements, or independent review.
+* @lindixu6-hash
+
+/.github/ @lindixu6-hash
+/action/ @lindixu6-hash
+/adapters/ @lindixu6-hash
+/evals/ @lindixu6-hash
+/profiles/ @lindixu6-hash
+/schema/ @lindixu6-hash

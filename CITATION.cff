@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this readiness contract, cite the software and pin the release or commit you evaluated."
+title: "Repository-Owned Agent Readiness Contract: Awesome Agentic Engineering"
+type: software
+version: 0.18.1
+date-released: 2026-08-20
+authors:
+  - family-names: Xu
+    given-names: Lindi
+    alias: lindixu6-hash
+repository-code: "https://github.com/lindixu6-hash/awesome-agentic-engineering"
+url: "https://lindixu6-hash.github.io/awesome-agentic-engineering/"
+license: MIT
+keywords:
+  - AI agent production readiness
+  - agent evaluation
+  - prompt injection
+  - tool permissions
+  - human approval
+  - evidence provenance
+  - fail-closed release gate
+  - Model Context Protocol
+abstract: >-
+  An executable, repository-owned readiness contract for evaluating AI agents
+  with risk-tiered scorecards, prompt-injection fixtures, runtime adapters,
+  evidence provenance, and fail-closed GitHub Actions gates. The project does
+  not certify production safety; scores and claims remain bounded by the
+  public evidence supplied for a pinned release or commit.

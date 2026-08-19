@@ -151,6 +151,16 @@ feature counts.
 - [x] Keep the verifier workflow and verifier code on separate immutable commits
 - [x] Document that repository governance and semantic safety remain unproven
 
+### v0.18.1: Governance and citation baseline
+
+- [x] Publish CFF 1.2 citation metadata for the repository-owned readiness
+      contract
+- [x] Declare repository-wide and subsystem review ownership with CODEOWNERS
+- [x] Declare the sole funding channel without changing scoring, review, or
+      inclusion decisions
+- [x] Preserve explicit non-goals for certification and independent validation
+- [x] Add regression coverage for governance ownership and claim boundaries
+
 ## Current Priorities
 
 - Add source-linked incidents only when they introduce a distinct control or

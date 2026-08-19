@@ -15,7 +15,7 @@ const chineseReadme = fs.readFileSync(
   "utf8"
 );
 
-test("roadmap marks shipped versions through v0.18 as completed", () => {
+test("roadmap marks shipped versions through v0.18.1 as completed", () => {
   for (const version of [
     "v0.1",
     "v0.2",
@@ -34,7 +34,8 @@ test("roadmap marks shipped versions through v0.18 as completed", () => {
     "v0.15",
     "v0.16",
     "v0.17",
-    "v0.18"
+    "v0.18",
+    "v0.18.1"
   ]) {
     assert.match(roadmap, new RegExp(`### ${version.replace(".", "\\.")}`));
   }
