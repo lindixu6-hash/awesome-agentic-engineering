@@ -430,6 +430,21 @@ High-value contributions:
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting.
 
+## Governance And Citation
+
+- [CODEOWNERS](.github/CODEOWNERS) identifies repository review ownership. It
+  does not bypass CI, evidence requirements, or independent review.
+- [CITATION.cff](CITATION.cff) provides citation metadata for the
+  **Repository-Owned Agent Readiness Contract**. Cite a pinned release or
+  commit so the evaluated contract remains reproducible.
+- [GitHub Sponsors](https://github.com/sponsors/lindixu6-hash) is the only
+  repository-declared funding channel. Funding never changes scoring,
+  evidence, review, or inclusion decisions.
+
+Non-goals: these governance files do not certify an Agent as production-safe,
+convert self-reported evidence into independent validation, or make funding a
+condition for participation.
+
 ## Roadmap
 
 - Add external adopters with public CI evidence.

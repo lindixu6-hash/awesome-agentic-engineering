@@ -122,3 +122,33 @@ test("pull request template keeps evidence, limitations, and bilingual claims", 
   assert.match(template, /## Limitations And Remaining Work/);
   assert.match(template, /## 中文摘要/);
 });
+
+test("governance triad keeps ownership, citation, and funding boundaries explicit", () => {
+  const citation = read("CITATION.cff");
+  const codeowners = read(".github/CODEOWNERS");
+  const funding = read(".github/FUNDING.yml");
+  const english = read("README.md");
+  const chinese = read("README.zh-CN.md");
+
+  assert.match(
+    citation,
+    /title: "Repository-Owned Agent Readiness Contract: Awesome Agentic Engineering"/
+  );
+  assert.match(citation, /repository-code: "https:\/\/github\.com\/lindixu6-hash\/awesome-agentic-engineering"/);
+  assert.match(citation, /prompt injection/);
+  assert.match(citation, /evidence provenance/);
+  assert.match(citation, /fail-closed release gate/);
+  assert.match(citation, /does\s+not certify production safety/);
+
+  assert.match(codeowners, /^\* @lindixu6-hash$/m);
+  assert.match(codeowners, /^\/\.github\/ @lindixu6-hash$/m);
+  assert.match(codeowners, /does not\s+# bypass branch protection/);
+
+  assert.match(funding, /^github:\s*\n\s+- lindixu6-hash$/m);
+  assert.match(funding, /Funding never changes scoring, evidence, review, or inclusion decisions/);
+
+  assert.match(english, /## Governance And Citation/);
+  assert.match(english, /do not certify an Agent as production-safe/);
+  assert.match(chinese, /## 治理与引用/);
+  assert.match(chinese, /不代表 Agent 已通过生产安全认证/);
+});
