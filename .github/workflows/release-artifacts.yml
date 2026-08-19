@@ -1,0 +1,67 @@
+name: Attested Release Artifacts
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+    steps:
+      - name: Check out release source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Verify release identity
+        env:
+          RELEASE_REF: ${{ github.ref }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          package_version="$(node -p 'require("./package.json").version')"
+          expected_ref="refs/tags/v${package_version}"
+          if [ "$EVENT_NAME" = "push" ] && [ "$RELEASE_REF" != "$expected_ref" ]; then
+            echo "Tag $RELEASE_REF does not match package version v$package_version." >&2
+            exit 1
+          fi
+
+      - name: Test package contract
+        run: npm test
+
+      - name: Build exact npm tarball and SBOM
+        run: |
+          mkdir -p release
+          npm pack --ignore-scripts --pack-destination release
+          npm sbom --sbom-format=cyclonedx > release/awesome-agentic-engineering.cdx.json
+          sha256sum release/* > release/SHA256SUMS
+          test "$(find release -maxdepth 1 -name '*.tgz' | wc -l)" = "1"
+
+      - name: Attest release artifacts
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6
+        with:
+          subject-path: |
+            release/*.tgz
+            release/awesome-agentic-engineering.cdx.json
+            release/SHA256SUMS
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-artifacts-${{ github.sha }}
+          path: release
+          if-no-files-found: error
+          retention-days: 90

@@ -285,3 +285,27 @@ test("producer attests one bundle before calling immutable verifier", () => {
   );
   assert.doesNotMatch(workflow, /uses: [^\n]+@v\d/);
 });
+
+test("release workflow builds and attests the exact package contract", () => {
+  const workflow = readWorkflow("release-artifacts.yml");
+
+  assert.match(workflow, /tags:\n\s+- "v\*"/);
+  assert.match(workflow, /persist-credentials: false/);
+  assert.match(workflow, /expected_ref="refs\/tags\/v\$\{package_version\}"/);
+  assert.match(workflow, /npm test/);
+  assert.match(workflow, /npm pack --ignore-scripts --pack-destination release/);
+  assert.match(workflow, /npm sbom --sbom-format=cyclonedx/);
+  assert.match(workflow, /sha256sum release\/\*/);
+  assert.match(workflow, /attestations: write/);
+  assert.match(workflow, /id-token: write/);
+  assert.match(
+    workflow,
+    /actions\/attest@1e69f48acb82d1966a394da916b4c1698aa569d6/
+  );
+  assert.match(
+    workflow,
+    /actions\/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a/
+  );
+  assert.match(workflow, /retention-days: 90/);
+  assert.doesNotMatch(workflow, /npm publish/);
+});
