@@ -1,8 +1,20 @@
 {
   "name": "awesome-agentic-engineering",
-  "version": "0.18.1",
+  "version": "0.18.2",
   "description": "Production-ready patterns, templates, evals, and scorecards for shipping AI agents.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lindixu6-hash/awesome-agentic-engineering.git"
+  },
+  "homepage": "https://lindixu6-hash.github.io/awesome-agentic-engineering/",
+  "bugs": {
+    "url": "https://github.com/lindixu6-hash/awesome-agentic-engineering/issues"
+  },
+  "funding": "https://github.com/sponsors/lindixu6-hash",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "bin": {
     "agentic-init": "./bin/agentic-init.js",
@@ -37,6 +49,9 @@
     "social",
     "starters",
     "templates",
+    "CITATION.cff",
+    "ROADMAP.md",
+    "SECURITY.md",
     "README.md",
     "README.zh-CN.md"
   ],
