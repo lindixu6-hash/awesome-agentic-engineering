@@ -303,6 +303,14 @@ test("release workflow builds and attests the exact package contract", () => {
   assert.match(workflow, /id-token: write/);
   assert.match(
     workflow,
+    /build:[\s\S]*permissions:[\s\S]*contents: read[\s\S]*publish:/
+  );
+  assert.match(
+    workflow,
+    /publish:\n\s+if: github\.event_name == 'push'[\s\S]*permissions:[\s\S]*contents: write/
+  );
+  assert.match(
+    workflow,
     /actions\/attest@1e69f48acb82d1966a394da916b4c1698aa569d6/
   );
   assert.match(
@@ -310,5 +318,17 @@ test("release workflow builds and attests the exact package contract", () => {
     /actions\/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a/
   );
   assert.match(workflow, /retention-days: 90/);
+  assert.match(workflow, /name: Publish durable release assets/);
+  assert.match(workflow, /name: Verify durable release download/);
+  assert.match(
+    workflow,
+    /if: github\.event_name == 'push'[\s\S]*gh release upload "\$GITHUB_REF_NAME"/
+  );
+  assert.match(workflow, /gh release download "\$GITHUB_REF_NAME"/);
+  assert.match(workflow, /cmp "\$source" "release-download\/\$file"/);
+  assert.doesNotMatch(
+    workflow,
+    /if: github\.event_name == 'workflow_dispatch'[\s\S]*gh release upload/
+  );
   assert.doesNotMatch(workflow, /npm publish/);
 });
