@@ -289,7 +289,8 @@ test("producer attests one bundle before calling immutable verifier", () => {
 test("release workflow builds and attests the exact package contract", () => {
   const workflow = readWorkflow("release-artifacts.yml");
 
-  assert.match(workflow, /tags:\n\s+- "v\*"/);
+  assert.match(workflow, /tags:\n\s+- "v\*\.\*\.\*"/);
+  assert.doesNotMatch(workflow, /tags:\n\s+- "v\*"\s*$/m);
   assert.match(workflow, /persist-credentials: false/);
   assert.match(workflow, /expected_ref="refs\/tags\/v\$\{package_version\}"/);
   assert.match(workflow, /npm test/);
