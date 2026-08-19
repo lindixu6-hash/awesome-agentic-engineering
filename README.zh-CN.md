@@ -54,6 +54,10 @@
   通过真实 `Agent` 与离线自定义 Model 的 `Runner.run()` 循环执行同一契约，
   包含经 Zod 校验的只读工具调用与禁用 Provider 网络后的测试。也可以阅读
   [在线 OpenAI Agents SDK 提示注入 Eval 指南](https://lindixu6-hash.github.io/awesome-agentic-engineering/zh/openai-agents-eval/)。
+- [CrewAI 适配器](adapters/crewai/README.zh-CN.md)：通过真实 `Agent`、
+  `Task.context` 与 `Crew.kickoff()` 路径执行同一契约，在跨 Agent Task handoff
+  中保留来源标签与不可信边界，并离线执行 CrewAI 只读 BaseTool
+  Action/Observation 回路。
 - [带 Attestation 的证据溯源](docs/evidence-provenance.zh-CN.md)：分离
   Producer 与 SHA 锁定的 Verifier Job，绑定源码、权限策略与证据 Digest，
   验证 GitHub/Sigstore 身份，并拒绝篡改、错误 Workflow 与旧 Attestation
@@ -137,6 +141,9 @@ npm run install:langgraph
 npm run eval:langgraph
 npm run install:openai-agents
 npm run eval:openai-agents
+npm run install:crewai
+npm run test:crewai
+npm run eval:crewai
 npm test
 ```
 

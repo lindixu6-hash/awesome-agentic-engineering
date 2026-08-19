@@ -198,6 +198,16 @@ feature counts.
 - [x] Download the public Release assets and verify checksums and byte identity
 - [x] Keep manual workflow runs read-only with respect to Releases
 
+### v0.19: CrewAI delegated-task runtime adapter
+
+- [x] Pin CrewAI 1.15.16 and its Python 3.12 environment with `uv.lock`
+- [x] Execute all fixtures through real Agent, Task context, and Crew kickoff
+- [x] Preserve source labels across an inter-Agent delegated-task boundary
+- [x] Exercise synthetic read-only tools through CrewAI Action/Observation
+- [x] Fail closed on provider network attempts and isolate runtime data paths
+- [x] Retain complete CI evidence and preserve evaluator independence
+- [x] Publish English and Chinese setup, evidence, and limitation guidance
+
 ## Current Priorities
 
 - Add source-linked incidents only when they introduce a distinct control or

@@ -14,7 +14,7 @@ const packageJson = JSON.parse(
 );
 
 test("package metadata points to canonical public project surfaces", () => {
-  assert.equal(packageJson.version, "0.18.6");
+  assert.equal(packageJson.version, "0.19.0");
   assert.equal(
     packageJson.repository.url,
     "git+https://github.com/lindixu6-hash/awesome-agentic-engineering.git"
@@ -54,6 +54,9 @@ test("npm tarball includes public contracts and excludes local evidence", () => 
     "ROADMAP.md",
     "SECURITY.md",
     "action.yml",
+    "adapters/crewai/pyproject.toml",
+    "adapters/crewai/uv.lock",
+    "adapters/crewai/run.py",
     "bin/agentic-init.js",
     "profiles/readiness-profiles.json",
     "schema/agent-card.schema.json"

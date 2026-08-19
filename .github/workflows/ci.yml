@@ -12,6 +12,14 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v10.0.1
+        with:
+          version: "0.11.33"
+          enable-cache: true
+          cache-dependency-glob: adapters/crewai/uv.lock
       - name: Validate community YAML
         run: |
           ruby -e '
@@ -26,6 +34,31 @@ jobs:
       - run: npm run install:langgraph
       - run: npm run install:openai-agents
       - run: npm test
+      - name: Install pinned CrewAI adapter
+        env:
+          CREWAI_DISABLE_TELEMETRY: "true"
+          CREWAI_TRACING_ENABLED: "false"
+          OTEL_SDK_DISABLED: "true"
+          HOME: ${{ github.workspace }}/.ci-home
+          XDG_DATA_HOME: ${{ github.workspace }}/.ci-home/data
+          XDG_CACHE_HOME: ${{ github.workspace }}/.ci-home/cache
+          LIBUUID_CLOCK_FILE: ${{ github.workspace }}/.ci-home/libuuid/clock.txt
+        run: |
+          mkdir -p \
+            "$XDG_DATA_HOME" \
+            "$XDG_CACHE_HOME" \
+            "$(dirname "$LIBUUID_CLOCK_FILE")"
+          npm run install:crewai
+      - name: Test real CrewAI delegation path
+        env:
+          CREWAI_DISABLE_TELEMETRY: "true"
+          CREWAI_TRACING_ENABLED: "false"
+          OTEL_SDK_DISABLED: "true"
+          HOME: ${{ github.workspace }}/.ci-home
+          XDG_DATA_HOME: ${{ github.workspace }}/.ci-home/data
+          XDG_CACHE_HOME: ${{ github.workspace }}/.ci-home/cache
+          LIBUUID_CLOCK_FILE: ${{ github.workspace }}/.ci-home/libuuid/clock.txt
+        run: npm run test:crewai
       - run: npm run validate:fixtures
       - run: npm run validate:results
       - name: Generate fail-closed starter
@@ -124,6 +157,29 @@ jobs:
         with:
           name: openai-agents-eval-evidence
           path: artifacts/openai-agents-eval
+      - name: Run CrewAI delegated-task eval
+        env:
+          CREWAI_DISABLE_TELEMETRY: "true"
+          CREWAI_TRACING_ENABLED: "false"
+          OTEL_SDK_DISABLED: "true"
+          HOME: ${{ github.workspace }}/.ci-home
+          XDG_DATA_HOME: ${{ github.workspace }}/.ci-home/data
+          XDG_CACHE_HOME: ${{ github.workspace }}/.ci-home/cache
+          LIBUUID_CLOCK_FILE: ${{ github.workspace }}/.ci-home/libuuid/clock.txt
+          SOURCE_DATE_EPOCH: "1786924800"
+        run: npm run eval:crewai
+      - name: Validate CrewAI results with published v0
+        run: |
+          npm exec --yes \
+            --package=github:lindixu6-hash/awesome-agentic-engineering#v0 \
+            -- agentic-validate-results \
+            artifacts/crewai-eval/results.jsonl \
+            --fixtures evals/prompt-injection/fixtures.jsonl
+      - name: Upload CrewAI eval evidence
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: crewai-eval-evidence
+          path: artifacts/crewai-eval
       - name: Test published v0 fixture validator
         run: |
           npm exec --yes \
