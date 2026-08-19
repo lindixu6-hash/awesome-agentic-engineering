@@ -190,6 +190,14 @@ feature counts.
 - [x] Keep the moving `v0` compatibility tag outside the release workflow
 - [x] Preserve fail-closed package-version matching for release tags
 
+### v0.18.6: Durable release asset automation
+
+- [x] Publish the workflow-produced tarball, SBOM, and checksum manifest to the
+      matching GitHub Release
+- [x] Create a Release for a valid manually pushed version tag when needed
+- [x] Download the public Release assets and verify checksums and byte identity
+- [x] Keep manual workflow runs read-only with respect to Releases
+
 ## Current Priorities
 
 - Add source-linked incidents only when they introduce a distinct control or
