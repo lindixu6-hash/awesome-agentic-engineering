@@ -295,7 +295,9 @@ test("release workflow builds and attests the exact package contract", () => {
   assert.match(workflow, /npm test/);
   assert.match(workflow, /npm pack --ignore-scripts --pack-destination release/);
   assert.match(workflow, /npm sbom --sbom-format=cyclonedx/);
-  assert.match(workflow, /sha256sum release\/\*/);
+  assert.match(workflow, /cd release/);
+  assert.match(workflow, /sha256sum \.\/\*\.tgz \.\/\*\.json > SHA256SUMS/);
+  assert.match(workflow, /sha256sum --check SHA256SUMS/);
   assert.match(workflow, /attestations: write/);
   assert.match(workflow, /id-token: write/);
   assert.match(

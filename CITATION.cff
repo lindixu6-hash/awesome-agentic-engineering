@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this readiness contract, cite the software and pin the release or commit you evaluated."
 title: "Repository-Owned Agent Readiness Contract: Awesome Agentic Engineering"
 type: software
-version: 0.18.3
+version: 0.18.4
 date-released: 2026-08-20
 authors:
   - family-names: Xu

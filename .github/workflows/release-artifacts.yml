@@ -47,7 +47,11 @@ jobs:
           mkdir -p release
           npm pack --ignore-scripts --pack-destination release
           npm sbom --sbom-format=cyclonedx > release/awesome-agentic-engineering.cdx.json
-          sha256sum release/* > release/SHA256SUMS
+          (
+            cd release
+            sha256sum ./*.tgz ./*.json > SHA256SUMS
+            sha256sum --check SHA256SUMS
+          )
           test "$(find release -maxdepth 1 -name '*.tgz' | wc -l)" = "1"
 
       - name: Attest release artifacts
