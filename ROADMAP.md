@@ -161,6 +161,15 @@ feature counts.
 - [x] Preserve explicit non-goals for certification and independent validation
 - [x] Add regression coverage for governance ownership and claim boundaries
 
+### v0.18.2: npm distribution contract
+
+- [x] Declare canonical repository, homepage, issue, funding, and public-access
+      package metadata
+- [x] Include citation, security, and roadmap boundaries in the package
+- [x] Verify the exact npm tarball manifest without publishing
+- [x] Exclude local evidence, tests, workflows, and worktree-only files
+- [x] Keep npm publication blocked until an authenticated owner performs it
+
 ## Current Priorities
 
 - Add source-linked incidents only when they introduce a distinct control or
