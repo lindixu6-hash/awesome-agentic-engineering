@@ -170,6 +170,14 @@ feature counts.
 - [x] Exclude local evidence, tests, workflows, and worktree-only files
 - [x] Keep npm publication blocked until an authenticated owner performs it
 
+### Next: Attested release artifacts
+
+- [x] Fail closed when a release tag does not match the package version
+- [x] Re-run the package contract before building release artifacts
+- [x] Generate the exact npm tarball, CycloneDX SBOM, and SHA-256 manifest
+- [x] Sign release artifacts with GitHub OIDC and Sigstore
+- [x] Retain artifacts without claiming or triggering npm publication
+
 ## Current Priorities
 
 - Add source-linked incidents only when they introduce a distinct control or
