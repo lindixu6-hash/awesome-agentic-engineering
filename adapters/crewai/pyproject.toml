@@ -1,0 +1,17 @@
+[project]
+name = "awesome-agentic-engineering-crewai-adapter"
+version = "1.0.0"
+description = "CrewAI delegated-task adapter for prompt-injection eval contracts."
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "crewai==1.15.16",
+]
+
+[dependency-groups]
+dev = [
+  "pytest==8.4.2",
+]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]

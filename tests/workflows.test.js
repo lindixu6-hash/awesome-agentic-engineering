@@ -215,6 +215,31 @@ test("CI installs OpenAI Agents and retains offline Runner evidence", () => {
   assert.match(workflow, /path: artifacts\/openai-agents-eval/);
 });
 
+test("CI runs and retains the isolated CrewAI delegation evidence", () => {
+  const workflow = readWorkflow("ci.yml");
+
+  assert.match(
+    workflow,
+    /actions\/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1/
+  );
+  assert.match(
+    workflow,
+    /astral-sh\/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78/
+  );
+  assert.match(workflow, /python-version: "3\.12"/);
+  assert.match(workflow, /version: "0\.11\.33"/);
+  assert.match(workflow, /LIBUUID_CLOCK_FILE:/);
+  assert.match(workflow, /npm run install:crewai/);
+  assert.match(workflow, /npm run test:crewai/);
+  assert.match(workflow, /npm run eval:crewai/);
+  assert.match(
+    workflow,
+    /agentic-validate-results \\\n\s+artifacts\/crewai-eval\/results\.jsonl/
+  );
+  assert.match(workflow, /name: crewai-eval-evidence/);
+  assert.match(workflow, /path: artifacts\/crewai-eval/);
+});
+
 test("reusable verifier pins code, actions, identity, and negative checks", () => {
   const workflow = readWorkflow("verify-eval-evidence.yml");
 

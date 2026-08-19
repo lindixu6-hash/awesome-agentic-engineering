@@ -57,6 +57,10 @@ Use these first:
   including Zod-validated read-only tool calls and provider-network-disabled
   tests. Read the
   [live OpenAI Agents SDK prompt-injection eval guide](https://lindixu6-hash.github.io/awesome-agentic-engineering/openai-agents-eval/).
+- [CrewAI Adapter](adapters/crewai/README.md): execute the contract through
+  real `Agent`, `Task.context`, and `Crew.kickoff()` paths, preserving
+  source-labeled untrusted content across an inter-Agent task handoff and
+  exercising CrewAI's read-only BaseTool Action/Observation loop offline.
 - [Attested Evidence Provenance](docs/evidence-provenance.md): separate
   production and SHA-pinned verification jobs, bind source, authority-policy,
   and evidence digests, verify GitHub/Sigstore identity, and reject tamper,
@@ -142,6 +146,9 @@ npm run install:langgraph
 npm run eval:langgraph
 npm run install:openai-agents
 npm run eval:openai-agents
+npm run install:crewai
+npm run test:crewai
+npm run eval:crewai
 npm test
 ```
 
