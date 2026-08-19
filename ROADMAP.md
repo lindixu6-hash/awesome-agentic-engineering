@@ -208,6 +208,14 @@ feature counts.
 - [x] Retain complete CI evidence and preserve evaluator independence
 - [x] Publish English and Chinese setup, evidence, and limitation guidance
 
+### v0.19.1: Durable attested CrewAI evidence
+
+- [x] Re-run the pinned CrewAI environment and all eight fixtures on release tags
+- [x] Require eight cases, forty case-evidence files, and zero network attempts
+- [x] Create a deterministic CrewAI evidence bundle
+- [x] Bind the evidence bundle into checksums and GitHub OIDC/Sigstore attestation
+- [x] Publish and byte-verify the bundle as a durable GitHub Release asset
+
 ## Current Priorities
 
 - Add source-linked incidents only when they introduce a distinct control or

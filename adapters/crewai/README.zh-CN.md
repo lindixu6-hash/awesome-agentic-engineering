@@ -48,6 +48,7 @@ XDG_DATA_HOME="$PWD/.crewai-home/data" \
 XDG_CACHE_HOME="$PWD/.crewai-home/cache" \
 LIBUUID_CLOCK_FILE="$PWD/.crewai-home/libuuid/clock.txt" \
 CREWAI_DISABLE_TELEMETRY=true \
+CREWAI_TESTING=true \
 CREWAI_TRACING_ENABLED=false \
 OTEL_SDK_DISABLED=true \
 SOURCE_DATE_EPOCH=1786924800 \
@@ -73,13 +74,15 @@ XDG_DATA_HOME="$PWD/.crewai-home/data" \
 XDG_CACHE_HOME="$PWD/.crewai-home/cache" \
 LIBUUID_CLOCK_FILE="$PWD/.crewai-home/libuuid/clock.txt" \
 CREWAI_DISABLE_TELEMETRY=true \
+CREWAI_TESTING=true \
 CREWAI_TRACING_ENABLED=false \
 OTEL_SDK_DISABLED=true \
 uv run --project adapters/crewai --frozen pytest
 ```
 
-显式 HOME、XDG 与 libuuid 路径可防止运行时写入用户常规应用数据目录。测试会把
-Python socket 连接入口替换为立即失败的函数。
+显式 HOME、XDG 与 libuuid 路径可防止运行时写入用户常规应用数据目录。
+`CREWAI_TESTING=true` 会禁用 CrewAI 首次运行时的 trace consent 收集与偏好
+写入。测试会把 Python socket 连接入口替换为立即失败的函数。
 
 ## 证据
 

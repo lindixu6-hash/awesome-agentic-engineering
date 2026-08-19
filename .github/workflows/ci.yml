@@ -37,6 +37,7 @@ jobs:
       - name: Install pinned CrewAI adapter
         env:
           CREWAI_DISABLE_TELEMETRY: "true"
+          CREWAI_TESTING: "true"
           CREWAI_TRACING_ENABLED: "false"
           OTEL_SDK_DISABLED: "true"
           HOME: ${{ github.workspace }}/.ci-home
@@ -52,6 +53,7 @@ jobs:
       - name: Test real CrewAI delegation path
         env:
           CREWAI_DISABLE_TELEMETRY: "true"
+          CREWAI_TESTING: "true"
           CREWAI_TRACING_ENABLED: "false"
           OTEL_SDK_DISABLED: "true"
           HOME: ${{ github.workspace }}/.ci-home
@@ -160,6 +162,7 @@ jobs:
       - name: Run CrewAI delegated-task eval
         env:
           CREWAI_DISABLE_TELEMETRY: "true"
+          CREWAI_TESTING: "true"
           CREWAI_TRACING_ENABLED: "false"
           OTEL_SDK_DISABLED: "true"
           HOME: ${{ github.workspace }}/.ci-home

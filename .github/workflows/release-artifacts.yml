@@ -27,6 +27,18 @@ jobs:
         with:
           node-version: 24
 
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v10.0.1
+        with:
+          version: "0.11.33"
+          enable-cache: true
+          cache-dependency-glob: adapters/crewai/uv.lock
+
       - name: Verify release identity
         env:
           RELEASE_REF: ${{ github.ref }}
@@ -42,6 +54,45 @@ jobs:
       - name: Test package contract
         run: npm test
 
+      - name: Build verified CrewAI evidence
+        env:
+          CREWAI_DISABLE_TELEMETRY: "true"
+          CREWAI_TESTING: "true"
+          CREWAI_TRACING_ENABLED: "false"
+          OTEL_SDK_DISABLED: "true"
+          HOME: ${{ github.workspace }}/.release-home
+          XDG_DATA_HOME: ${{ github.workspace }}/.release-home/data
+          XDG_CACHE_HOME: ${{ github.workspace }}/.release-home/cache
+          LIBUUID_CLOCK_FILE: ${{ github.workspace }}/.release-home/libuuid/clock.txt
+          SOURCE_DATE_EPOCH: "1786924800"
+        run: |
+          mkdir -p \
+            "$XDG_DATA_HOME" \
+            "$XDG_CACHE_HOME" \
+            "$(dirname "$LIBUUID_CLOCK_FILE")"
+          npm run install:crewai
+          npm run test:crewai
+          npm run eval:crewai
+          npm exec --yes \
+            --package=github:lindixu6-hash/awesome-agentic-engineering#v0 \
+            -- agentic-validate-results \
+            artifacts/crewai-eval/results.jsonl \
+            --fixtures evals/prompt-injection/fixtures.jsonl
+          test "$(find artifacts/crewai-eval/cases -mindepth 1 -maxdepth 1 -type d | wc -l)" = "8"
+          test "$(find artifacts/crewai-eval/cases -type f | wc -l)" = "40"
+          test "$(jq -s '[.[].network_attempts | length] | add' \
+            artifacts/crewai-eval/cases/*/runtime-path.json)" = "0"
+          mkdir -p release
+          tar \
+            --sort=name \
+            --mtime="@1786924800" \
+            --owner=0 \
+            --group=0 \
+            --numeric-owner \
+            -czf release/crewai-eval-evidence.tar.gz \
+            -C artifacts \
+            crewai-eval
+
       - name: Build exact npm tarball and SBOM
         run: |
           mkdir -p release
@@ -49,7 +100,7 @@ jobs:
           npm sbom --sbom-format=cyclonedx > release/awesome-agentic-engineering.cdx.json
           (
             cd release
-            sha256sum ./*.tgz ./*.json > SHA256SUMS
+            sha256sum ./*.tgz ./*.tar.gz ./*.json > SHA256SUMS
             sha256sum --check SHA256SUMS
           )
           test "$(find release -maxdepth 1 -name '*.tgz' | wc -l)" = "1"
@@ -59,6 +110,7 @@ jobs:
         with:
           subject-path: |
             release/*.tgz
+            release/crewai-eval-evidence.tar.gz
             release/awesome-agentic-engineering.cdx.json
             release/SHA256SUMS
 
@@ -98,6 +150,7 @@ jobs:
           fi
           gh release upload "$GITHUB_REF_NAME" \
             release/*.tgz \
+            release/crewai-eval-evidence.tar.gz \
             release/awesome-agentic-engineering.cdx.json \
             release/SHA256SUMS \
             --repo "$GITHUB_REPOSITORY" \
@@ -117,6 +170,7 @@ jobs:
           )
           for source in \
             release/*.tgz \
+            release/crewai-eval-evidence.tar.gz \
             release/awesome-agentic-engineering.cdx.json \
             release/SHA256SUMS; do
             file="${source#release/}"

@@ -51,6 +51,7 @@ XDG_DATA_HOME="$PWD/.crewai-home/data" \
 XDG_CACHE_HOME="$PWD/.crewai-home/cache" \
 LIBUUID_CLOCK_FILE="$PWD/.crewai-home/libuuid/clock.txt" \
 CREWAI_DISABLE_TELEMETRY=true \
+CREWAI_TESTING=true \
 CREWAI_TRACING_ENABLED=false \
 OTEL_SDK_DISABLED=true \
 SOURCE_DATE_EPOCH=1786924800 \
@@ -76,14 +77,17 @@ XDG_DATA_HOME="$PWD/.crewai-home/data" \
 XDG_CACHE_HOME="$PWD/.crewai-home/cache" \
 LIBUUID_CLOCK_FILE="$PWD/.crewai-home/libuuid/clock.txt" \
 CREWAI_DISABLE_TELEMETRY=true \
+CREWAI_TESTING=true \
 CREWAI_TRACING_ENABLED=false \
 OTEL_SDK_DISABLED=true \
 uv run --project adapters/crewai --frozen pytest
 ```
 
 The explicit HOME, XDG, and libuuid paths prevent the runtime from writing to
-the user's normal application-data directories. Tests replace Python socket
-connection entry points with functions that fail immediately.
+the user's normal application-data directories. `CREWAI_TESTING=true` disables
+CrewAI's first-execution trace-consent collection and preference write. Tests
+replace Python socket connection entry points with functions that fail
+immediately.
 
 ## Evidence
 

@@ -319,10 +319,26 @@ test("release workflow builds and attests the exact package contract", () => {
   assert.match(workflow, /persist-credentials: false/);
   assert.match(workflow, /expected_ref="refs\/tags\/v\$\{package_version\}"/);
   assert.match(workflow, /npm test/);
+  assert.match(workflow, /name: Build verified CrewAI evidence/);
+  assert.match(workflow, /npm run install:crewai/);
+  assert.match(workflow, /npm run test:crewai/);
+  assert.match(workflow, /npm run eval:crewai/);
+  assert.match(workflow, /crewai-eval\/results\.jsonl/);
+  assert.match(workflow, /find artifacts\/crewai-eval\/cases/);
+  assert.match(
+    workflow,
+    /jq -s '\[\.\[\]\.network_attempts \| length\] \| add'/
+  );
+  assert.match(workflow, /crewai-eval-evidence\.tar\.gz/);
+  assert.match(workflow, /--sort=name/);
+  assert.match(workflow, /--mtime="@1786924800"/);
   assert.match(workflow, /npm pack --ignore-scripts --pack-destination release/);
   assert.match(workflow, /npm sbom --sbom-format=cyclonedx/);
   assert.match(workflow, /cd release/);
-  assert.match(workflow, /sha256sum \.\/\*\.tgz \.\/\*\.json > SHA256SUMS/);
+  assert.match(
+    workflow,
+    /sha256sum \.\/\*\.tgz \.\/\*\.tar\.gz \.\/\*\.json > SHA256SUMS/
+  );
   assert.match(workflow, /sha256sum --check SHA256SUMS/);
   assert.match(workflow, /attestations: write/);
   assert.match(workflow, /id-token: write/);
