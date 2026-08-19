@@ -170,7 +170,7 @@ feature counts.
 - [x] Exclude local evidence, tests, workflows, and worktree-only files
 - [x] Keep npm publication blocked until an authenticated owner performs it
 
-### Next: Attested release artifacts
+### v0.18.3: Attested release artifacts
 
 - [x] Fail closed when a release tag does not match the package version
 - [x] Re-run the package contract before building release artifacts
