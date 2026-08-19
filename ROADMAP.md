@@ -178,6 +178,12 @@ feature counts.
 - [x] Sign release artifacts with GitHub OIDC and Sigstore
 - [x] Retain artifacts without claiming or triggering npm publication
 
+### v0.18.4: Portable release verification
+
+- [x] Generate checksum entries relative to the downloaded artifact root
+- [x] Verify the checksum manifest during the release workflow
+- [x] Preserve the exact tarball, SBOM, and attestation contract from v0.18.3
+
 ## Current Priorities
 
 - Add source-linked incidents only when they introduce a distinct control or
