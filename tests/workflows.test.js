@@ -224,7 +224,7 @@ test("CI runs and retains the isolated CrewAI delegation evidence", () => {
   );
   assert.match(
     workflow,
-    /astral-sh\/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78/
+    /astral-sh\/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d/
   );
   assert.match(workflow, /python-version: "3\.12"/);
   assert.match(workflow, /version: "0\.11\.33"/);
