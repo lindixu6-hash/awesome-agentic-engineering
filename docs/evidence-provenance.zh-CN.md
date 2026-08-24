@@ -41,7 +41,7 @@ Reusable Verifier 锁定到 Commit 250bebc
 本次运行中，Producer 无法替换 Verifier 代码。Caller 使用：
 
 ```yaml
-uses: lindixu6-hash/awesome-agentic-engineering/.github/workflows/verify-eval-evidence.yml@250bebc26eaaa3b027058ee3d68c3e1776aec668
+uses: lindixu6-hash/awesome-agentic-engineering/.github/workflows/verify-eval-evidence.yml@b9209a83285b37209275e294ba3c035f3f4de2b5
 ```
 
 该 Reusable Workflow 从以下 Commit 检出 Manifest Verifier：

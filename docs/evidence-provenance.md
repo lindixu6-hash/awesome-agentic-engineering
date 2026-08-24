@@ -42,7 +42,7 @@ reusable verifier pinned to commit 250bebc
 The producer cannot replace verifier code during this run. The caller uses:
 
 ```yaml
-uses: lindixu6-hash/awesome-agentic-engineering/.github/workflows/verify-eval-evidence.yml@250bebc26eaaa3b027058ee3d68c3e1776aec668
+uses: lindixu6-hash/awesome-agentic-engineering/.github/workflows/verify-eval-evidence.yml@b9209a83285b37209275e294ba3c035f3f4de2b5
 ```
 
 That reusable workflow checks out the manifest verifier from:
