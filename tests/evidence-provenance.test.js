@@ -195,7 +195,7 @@ test("bilingual provenance docs expose evidence and governance limits", () => {
       /16baef5ae191903b1d04c1b279ce8673578a74e592af2ddc66466bf2f5f71a76/
     );
     assert.match(document, /8efe0c970b1d37e72cac6cc73f96d6e3066309b7/);
-    assert.match(document, /250bebc26eaaa3b027058ee3d68c3e1776aec668/);
+    assert.match(document, /b9209a83285b37209275e294ba3c035f3f4de2b5/);
   }
   assert.match(english, /tool-permission/i);
   assert.match(english, /approval-policy/i);
